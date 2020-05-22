@@ -5,7 +5,7 @@ import java.io.Serializable;
 // Class for a song. Song consists of the title and its Id to play it
 public class Song implements Serializable {
     public String title;
-    public Long id;
+    public long id;
 
     public Song(String title, Long id){
         this.title = title;
@@ -20,7 +20,7 @@ public class Song implements Serializable {
         this.title = title;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
