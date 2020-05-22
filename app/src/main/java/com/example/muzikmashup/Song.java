@@ -1,7 +1,9 @@
 package com.example.muzikmashup;
 
+import java.io.Serializable;
+
 // Class for a song. Song consists of the title and its Id to play it
-public class Song {
+public class Song implements Serializable {
     public String title;
     public Long id;
 

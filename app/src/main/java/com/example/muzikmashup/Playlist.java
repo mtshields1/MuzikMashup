@@ -1,8 +1,9 @@
 package com.example.muzikmashup;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Playlist {
+public class Playlist implements Serializable {
     public String playlistName;
     public long playlistId;
     public List<Song> songs;

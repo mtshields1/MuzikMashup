@@ -35,11 +35,9 @@ public class MainActivity extends AppCompatActivity {
         else{
             createPlaylistButtons(playlistInfo);
         }
-        System.out.println(playlistInfo);
-        // TODO: make button event handlers. When selecting a playlist, send those songs over to new activity to pick which way to play
     }
 
-    // Get playlist names to display
+    // Get playlist's info. This includes the name, id, and all of its songs
     public void getPlaylistDetails(Cursor playlists, List<Playlist> playlistInfo){
         List<String> songNames = new ArrayList<>();
         for(int i = 0; i < playlists.getCount(); i++)
@@ -72,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout = (LinearLayout)findViewById(R.id.activity_main);
 
         for (int b = 0; b < playlistInfo.size(); b++){
-            String playlistName = playlistInfo.get(b).playlistName;
+            Playlist playlist = playlistInfo.get(b);
 
             Button btn = new Button(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -80,20 +78,22 @@ public class MainActivity extends AppCompatActivity {
             layoutParams.setMargins(60, 0, 60, 0);
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
             btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            btn.setText(playlistName);
+            btn.setText(playlist.playlistName);
             btn.setId(0);  // not sure this matters. just setting to 0 for all for now
-            //createButtonEvent(btn);
+            createButtonEvent(btn, playlist);
             layout.addView(btn, layoutParams);
         }
     }
 
     // Create events for each selectable playlist
-    public void createButtonEvent(final Button btn){
+    public void createButtonEvent(final Button btn, final Playlist playlist){
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PlaylistActivity.class);
-                intent.putExtra("playlistName", btn.getText());
+                Bundle playlistBundle = new Bundle();
+                playlistBundle.putSerializable("playlistInfo", playlist);
+                intent.putExtras(playlistBundle);
                 startActivity(intent);
             }
         });
