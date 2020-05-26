@@ -46,4 +46,17 @@
         app:layout_constraintVertical_bias="0.459"
         app:srcCompat="@android:drawable/ic_media_previous"
         android:contentDescription="@string/button_to_play_the_previous_song" />
+
+    <ImageButton
+        android:id="@+id/playPauseButton"
+        android:layout_width="69dp"
+        android:layout_height="72dp"
+        android:background="#fc0303"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.459"
+        app:srcCompat="@android:drawable/ic_media_pause"
+        android:contentDescription="@string/button_to_pause_and_play_songs_will_swap_between_pause_and_play_depending_on_if_music_is_playing_or_not" />
 </androidx.constraintlayout.widget.ConstraintLayout>

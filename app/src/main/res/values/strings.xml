@@ -5,4 +5,5 @@
     <string name="song">song</string>
     <string name="button_to_play_the_next_song">Button to play the next song</string>
     <string name="button_to_play_the_previous_song">Button to play the previous song</string>
+    <string name="button_to_pause_and_play_songs_will_swap_between_pause_and_play_depending_on_if_music_is_playing_or_not">Button to pause and play songs. Will swap between pause and play depending on if music is playing or not</string>
 </resources>

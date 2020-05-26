@@ -3,6 +3,9 @@ package com.example.muzikmashup;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentUris;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -42,6 +45,7 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
         if (playlistBundle != null) {
             createNextButtonEvent((ImageButton) findViewById(R.id.nextSongButton));
             createPreviousButtonEvent((ImageButton) findViewById(R.id.previousSongButton));
+            createPlayPauseButtonEvent((ImageButton) findViewById(R.id.playPauseButton));
             // Shuffle music
             final Playlist playlistInfo = (Playlist) playlistBundle.getSerializable("playlistInfo");
             cloneList(playlistInfo.songs);
@@ -100,18 +104,27 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
 
     // Button for playing the next song
     public void createNextButtonEvent(ImageButton nextSongButton){
+        // Check if the music was paused. If so, swap the play/pause button to pause, as a new song will be playing
         nextSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!mpObject.isPlaying()){
+                    swapToPause((ImageButton) findViewById(R.id.playPauseButton));
+                }
                 assessMusicState();
             }
         });
     }
 
+    // Button for playing a previously played song
     public void createPreviousButtonEvent(ImageButton previousSongButton){
         previousSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Check if the music was paused. If so, swap the play/pause button to pause, as a new song will be playing
+                if (!mpObject.isPlaying()){
+                    swapToPause((ImageButton) findViewById(R.id.playPauseButton));
+                }
                 mpObject.reset();
                 // First, ensure a song has been played previously. If not, this is the first song in the list. Play it from the start
                 if (songPlayOrder.size() == 1){
@@ -127,6 +140,38 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void createPlayPauseButtonEvent(final ImageButton playPauseSongButton){
+        playPauseSongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Music is playing, so pause it
+                if (mpObject.isPlaying()) {
+                    mpObject.pause();
+                    swapToPlay(playPauseSongButton);
+                }
+                else{
+                    // Music is paused. Resume it
+                    mpObject.start();
+                    swapToPause(playPauseSongButton);
+                }
+            }
+        });
+    }
+
+    // Swap the play/pause button to display the play symbol
+    private void swapToPlay(ImageButton playPauseSongButton){
+        playPauseSongButton.setImageResource(android.R.drawable.ic_media_play);
+        int color = Color.parseColor("#1df024");
+        playPauseSongButton.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC));
+    }
+
+    // Swap the play/pause button to display the pause symbol
+    private void swapToPause(ImageButton playPauseSongButton){
+        playPauseSongButton.setImageResource(android.R.drawable.ic_media_pause);
+        int color = Color.parseColor("#fc0303");
+        playPauseSongButton.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC));
     }
 
     /*
