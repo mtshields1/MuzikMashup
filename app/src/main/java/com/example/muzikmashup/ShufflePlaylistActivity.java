@@ -10,8 +10,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,6 +36,10 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
     private static Stack<Song> previousSongPlayOrder = new Stack<>();
     // Media player to play the song
     private static MediaPlayer mpObject = new MediaPlayer();
+    // The seek bar for song progress
+    private SeekBar songSeekBar;
+    // The display to show song time progress
+    TextView songTimeProgress;
     // If the user plays previous songs
     private boolean playingPreviousSongs = false;
 
@@ -46,6 +52,9 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
             createNextButtonEvent((ImageButton) findViewById(R.id.nextSongButton));
             createPreviousButtonEvent((ImageButton) findViewById(R.id.previousSongButton));
             createPlayPauseButtonEvent((ImageButton) findViewById(R.id.playPauseButton));
+            songSeekBar = (SeekBar) findViewById(R.id.songSeekBar);
+            songTimeProgress = (TextView) findViewById(R.id.songTimeProgress);
+            createSeekBarUIHandler();
             // Shuffle music
             final Playlist playlistInfo = (Playlist) playlistBundle.getSerializable("playlistInfo");
             cloneList(playlistInfo.songs);
@@ -95,7 +104,11 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
                 mpObject.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mpObject.setDataSource(this, contentUri);
                 mpObject.prepare();
+                // Set seek bar amount
+                songSeekBar.setMax(mpObject.getDuration()/1000);
                 mpObject.start();
+                // Update song time to the newest song
+                songTimeProgress.post(mUpdateTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,6 +155,7 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
         });
     }
 
+    // Button for resuming song play or pausing it
     public void createPlayPauseButtonEvent(final ImageButton playPauseSongButton){
         playPauseSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +172,68 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // Handler to update the song progress bar
+    private void createSeekBarUIHandler(){
+        final Handler mHandler = new Handler();
+        // Make sure you update Seekbar on UI thread
+        ShufflePlaylistActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(mpObject != null){
+                    int mCurrentPosition = mpObject.getCurrentPosition() / 1000;
+                    songSeekBar.setProgress(mCurrentPosition);
+                }
+                mHandler.postDelayed(this, 1000);
+            }
+        });
+    }
+
+    // Method to continually update the text view that displays how much of the song has played
+    private Runnable mUpdateTime = new Runnable() {
+        public void run() {
+            int currentDuration;
+            if (mpObject.isPlaying()) {
+                currentDuration = mpObject.getCurrentPosition();
+                updatePlayer(currentDuration);
+                songTimeProgress.postDelayed(this, 1000);
+            }else {
+                songTimeProgress.removeCallbacks(this);
+            }
+        }
+    };
+
+    // Method to update the song progress time text view
+    private void updatePlayer(int currentDuration){
+        songTimeProgress.setText("" + milliSecondsToTimer((long) currentDuration) + "/" + milliSecondsToTimer((long) mpObject.getDuration()));
+    }
+
+    // Method to convert milliseconds time to Timer Format
+    public String milliSecondsToTimer(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString = "";
+
+        // Convert total duration into time
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+        // Add hours if there are any
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        // return timer string
+        return finalTimerString;
     }
 
     // Swap the play/pause button to display the play symbol

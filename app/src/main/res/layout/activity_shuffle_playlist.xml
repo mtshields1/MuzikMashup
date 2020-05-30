@@ -59,4 +59,27 @@
         app:layout_constraintVertical_bias="0.459"
         app:srcCompat="@android:drawable/ic_media_pause"
         android:contentDescription="@string/button_to_pause_and_play_songs_will_swap_between_pause_and_play_depending_on_if_music_is_playing_or_not" />
+
+    <SeekBar
+        android:id="@+id/songSeekBar"
+        android:layout_width="320dp"
+        android:layout_height="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.729" />
+
+    <TextView
+        android:id="@+id/songTimeProgress"
+        android:layout_width="75dp"
+        android:layout_height="19dp"
+        android:text="@string/song_time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.765" />
 </androidx.constraintlayout.widget.ConstraintLayout>
