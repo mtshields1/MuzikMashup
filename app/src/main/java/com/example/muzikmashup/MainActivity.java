@@ -23,6 +23,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * Main activity of MuzikMashup. Displays all user playlists
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;

@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
+/***
+ * Activity to shuffle any playlist
+ */
 public class ShufflePlaylistActivity extends AppCompatActivity {
 
     // Number of songs that haven't been played yet
