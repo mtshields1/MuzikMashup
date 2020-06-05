@@ -9,6 +9,11 @@ import java.util.Map;
  */
 public class SongDataService implements ISongDataService
 {
+    public SongDataService(ShuffleType shuffleType)
+    {
+        // Open the file corresponding to how the user wants their music to be played, i.e., regular shuffle, times played, etc
+    }
+
     public void updateSongTimePlayed(Song song)
     {
 
