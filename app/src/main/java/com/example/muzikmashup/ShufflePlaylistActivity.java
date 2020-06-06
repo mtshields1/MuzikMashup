@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,6 +46,8 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
     TextView songTimeProgress;
     // If the user plays previous songs
     private boolean playingPreviousSongs = false;
+    // Song data service; used to read and save song data
+    private SongDataService songDataService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,11 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shuffle_playlist);
         Bundle playlistBundle = this.getIntent().getExtras();
         if (playlistBundle != null) {
+            try {
+                songDataService = new SongDataService(ShuffleType.REGULAR, getApplicationContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             createNextButtonEvent((ImageButton) findViewById(R.id.nextSongButton));
             createPreviousButtonEvent((ImageButton) findViewById(R.id.previousSongButton));
             createPlayPauseButtonEvent((ImageButton) findViewById(R.id.playPauseButton));
