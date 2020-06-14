@@ -11,7 +11,7 @@ public interface ISongDataService
 
     void updateTimesSongHasBeenPlayed(Song song);
 
-    Map<String, Long> getSongTimePlayedValues();
+    Map<String, Integer> getSongTimePlayedValues();
 
     Map<String, Integer> getTimesSongHasBeenPlayedValues();
 

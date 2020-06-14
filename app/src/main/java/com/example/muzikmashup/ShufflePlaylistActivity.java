@@ -48,6 +48,8 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
     private boolean playingPreviousSongs = false;
     // Song data service; used to read and save song data
     private SongDataService songDataService;
+    // Currently playing song
+    Song currentSong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
         if (playlistBundle != null) {
             try {
                 songDataService = new SongDataService(ShuffleType.REGULAR, getApplicationContext());
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             createNextButtonEvent((ImageButton) findViewById(R.id.nextSongButton));
@@ -118,6 +120,8 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
                 // Set seek bar amount
                 songSeekBar.setMax(mpObject.getDuration()/1000);
                 mpObject.start();
+                // Set the actively playing song to this
+                currentSong = songToPlay;
                 // Update song time to the newest song
                 songTimeProgress.post(mUpdateTime);
             }
@@ -265,8 +269,11 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
      Method used to assess the state of music being played. There are 2 potential states as follows
      1. The user pressed the previous button several times. Need to go through song play order stack and pop the songs and play them
      2. Songs are being played as usual. Get, and play, a new song
+     This method is always called when preparing to play a new song, whether it be the song just finished playing or the user pressed the "next song" button.
+     Therefore, updating song play data will be done here
      */
     public void assessMusicState(){
+        songDataService.updateSongData(currentSong);
         // The user was playing a previously played song. Advance forward in the song play order
         if (playingPreviousSongs){
             mpObject.reset();
