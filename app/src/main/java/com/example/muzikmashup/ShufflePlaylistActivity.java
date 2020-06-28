@@ -273,7 +273,7 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
      Therefore, updating song play data will be done here
      */
     public void assessMusicState(){
-        songDataService.updateSongData(currentSong);
+        songDataService.updateSongData(currentSong, mpObject.getCurrentPosition(), mpObject.getDuration());
         // The user was playing a previously played song. Advance forward in the song play order
         if (playingPreviousSongs){
             mpObject.reset();

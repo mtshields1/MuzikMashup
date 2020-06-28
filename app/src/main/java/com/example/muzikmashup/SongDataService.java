@@ -1,6 +1,9 @@
 package com.example.muzikmashup;
 
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,18 +62,34 @@ public class SongDataService implements ISongDataService
         }
     }
 
-    public void updateSongData(Song song) {
+    public void updateSongData(Song song, int songTimePlayed, int totalSongTime) {
         // TODO: Calculate percentage of song played, then call updateSongTimePlayed and updateTimesSongHasBeenPlayed (if time was greater than 10 seconds)
+        // Only update a song's total play time and total times played if 10% or more of the song was listened to. This is because while shuffling
+        // through songs, the user still needs to see the song to skip it, hence they will "listen" to at least some portion of it
+        if (calculatePercentOfSongPlayed(songTimePlayed, totalSongTime) >= .1){
+            updateSongTimePlayed(song, songTimePlayed);
+            updateTimesSongHasBeenPlayed(song);
+        }
     }
 
-    public void updateSongTimePlayed(Song song)
+    public void updateSongTimePlayed(Song song, int songTimePlayed)
     {
-
+        if (totalTimeSongHasBeenListenedTo.containsKey(song.title)){
+            totalTimeSongHasBeenListenedTo.put(song.title, totalTimeSongHasBeenListenedTo.get(song.title) + songTimePlayed);
+        }
+        else {
+            totalTimeSongHasBeenListenedTo.put(song.title, songTimePlayed);
+        }
     }
 
     public void updateTimesSongHasBeenPlayed(Song song)
     {
-
+        if (timesSongHasBeenPlayed.containsKey(song.title)){
+            timesSongHasBeenPlayed.put(song.title, timesSongHasBeenPlayed.get(song.title) + 1);
+        }
+        else {
+            timesSongHasBeenPlayed.put(song.title, 1);
+        }
     }
 
     public Map<String, Integer> getSongTimePlayedValues() {
@@ -81,8 +100,8 @@ public class SongDataService implements ISongDataService
         return timesSongHasBeenPlayed;
     }
 
-    public void calculatePercentOfSongPlayed(Song song)
+    public long calculatePercentOfSongPlayed(long songTimePlayed, long totalSongTime)
     {
-
+        return songTimePlayed / totalSongTime;
     }
 }

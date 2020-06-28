@@ -7,7 +7,7 @@ import java.util.Map;
  */
 public interface ISongDataService
 {
-    void updateSongTimePlayed(Song song);
+    void updateSongTimePlayed(Song song, int songTimePlayed);
 
     void updateTimesSongHasBeenPlayed(Song song);
 
@@ -15,5 +15,5 @@ public interface ISongDataService
 
     Map<String, Integer> getTimesSongHasBeenPlayedValues();
 
-    void calculatePercentOfSongPlayed(Song song);
+    long calculatePercentOfSongPlayed(long songTimePlayed, long totalSongTime);
 }
