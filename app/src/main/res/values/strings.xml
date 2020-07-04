@@ -7,4 +7,7 @@
     <string name="button_to_play_the_previous_song">Button to play the previous song</string>
     <string name="button_to_pause_and_play_songs_will_swap_between_pause_and_play_depending_on_if_music_is_playing_or_not">Button to pause and play songs. Will swap between pause and play depending on if music is playing or not</string>
     <string name="song_time">song time</string>
+    <string name="button_used_to_shuffle_songs_in_the_playlist">Button used to shuffle songs in the playlist</string>
+    <string name="times_songs_played">Times Songs Played</string>
+    <string name="total_listen_times">Total Listen Times</string>
 </resources>

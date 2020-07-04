@@ -2,9 +2,11 @@ package com.example.muzikmashup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ public class PlaylistActivity extends AppCompatActivity {
             TextView titleText = (TextView)findViewById(R.id.titlePlaylist);
             titleText.setText(playlistInfo.playlistName);
             createSongButtonEvent((ImageButton) findViewById(R.id.shuffleButton), playlistInfo);
+            createSongsPlayedButtonEvent((Button) findViewById(R.id.songsPlayedButton));
         }
         else {
             // no songs found?
@@ -39,6 +42,16 @@ public class PlaylistActivity extends AppCompatActivity {
                 playlistBundle.putSerializable("playlistInfo", playlist);
                 intent.putExtras(playlistBundle);
                 startActivity(intent);
+            }
+        });
+    }
+
+    public void createSongsPlayedButtonEvent(Button songsPlayedButton){
+        songsPlayedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PlaylistActivity.this);
+                builder.setTitle("Times Songs Have Been Played");
             }
         });
     }
