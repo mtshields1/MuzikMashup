@@ -32,16 +32,19 @@ public class SongDataService implements ISongDataService
 
     public SongDataService(ShuffleType shuffleType, Context context) throws IOException, ClassNotFoundException {
 
+        String fileName = shuffleType.toString() + ".txt";
+        String filePath = context.getFilesDir().getPath() + "/" + fileName;
+
         // Open the file corresponding to how the user wants their music to be played, i.e., regular shuffle, times played, etc
-        File playFile = new File(shuffleType.toString());
+        File playFile = new File(filePath);
         boolean fileDoesNotExist = playFile.createNewFile(); // if file already exists will do nothing
 
         // Create the output stream to write to the file
-        fileOutputStream = context.openFileOutput(playFile.toString(), Context.MODE_PRIVATE);
+        fileOutputStream = context.openFileOutput(fileName.toString(), Context.MODE_PRIVATE);
         outputStream = new ObjectOutputStream(fileOutputStream);
 
         // Create the input stream to read from the file
-        fileInputStream = context.openFileInput(playFile.toString());
+        fileInputStream = context.openFileInput(fileName.toString());
         objectInputStream = new ObjectInputStream(fileInputStream);
         getFileMap(shuffleType, fileDoesNotExist);
     }
@@ -102,6 +105,8 @@ public class SongDataService implements ISongDataService
 
     public long calculatePercentOfSongPlayed(long songTimePlayed, long totalSongTime)
     {
+        if (songTimePlayed <= 0)
+            return 0;
         return songTimePlayed / totalSongTime;
     }
 }
