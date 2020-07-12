@@ -287,6 +287,10 @@ public class ShufflePlaylistActivity extends AppCompatActivity {
             if (songsLeftSize >= 1){
                 playMusic(getNextSong());
             }
+            else {
+                // No songs left to play! Save the data and end
+                //
+            }
         }
     }
 

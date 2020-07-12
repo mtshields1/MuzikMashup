@@ -1,5 +1,6 @@
 package com.example.muzikmashup;
 
+import java.io.IOException;
 import java.util.Map;
 
 /***
@@ -10,6 +11,8 @@ public interface ISongDataService
     void updateSongTimePlayed(Song song, int songTimePlayed);
 
     void updateTimesSongHasBeenPlayed(Song song);
+
+    void saveSongDataToFile() throws IOException;
 
     Map<String, Integer> getSongTimePlayedValues();
 

@@ -32,21 +32,26 @@ public class SongDataService implements ISongDataService
 
     public SongDataService(ShuffleType shuffleType, Context context) throws IOException, ClassNotFoundException {
 
-        String fileName = shuffleType.toString() + ".txt";
-        String filePath = context.getFilesDir().getPath() + "/" + fileName;
+        if (shuffleType.equals(shuffleType.REGULAR)) {
+            // For regular shuffle, data needs to be saved to both the song times played and total song time played files
+        }
+        else {
+            String fileName = shuffleType.toString() + ".txt";
+            String filePath = context.getFilesDir().getPath() + "/" + fileName;
 
-        // Open the file corresponding to how the user wants their music to be played, i.e., regular shuffle, times played, etc
-        File playFile = new File(filePath);
-        boolean fileDoesNotExist = playFile.createNewFile(); // if file already exists will do nothing
+            // Open the file corresponding to how the user wants their music to be played, i.e., regular shuffle, times played, etc
+            File playFile = new File(filePath);
+            boolean fileDoesNotExist = playFile.createNewFile(); // if file already exists will do nothing
 
-        // Create the output stream to write to the file
-        fileOutputStream = context.openFileOutput(fileName.toString(), Context.MODE_PRIVATE);
-        outputStream = new ObjectOutputStream(fileOutputStream);
+            // Create the output stream to write to the file
+            fileOutputStream = context.openFileOutput(fileName.toString(), Context.MODE_PRIVATE);
+            outputStream = new ObjectOutputStream(fileOutputStream);
 
-        // Create the input stream to read from the file
-        fileInputStream = context.openFileInput(fileName.toString());
-        objectInputStream = new ObjectInputStream(fileInputStream);
-        getFileMap(shuffleType, fileDoesNotExist);
+            // Create the input stream to read from the file
+            fileInputStream = context.openFileInput(fileName.toString());
+            objectInputStream = new ObjectInputStream(fileInputStream);
+            getFileMap(shuffleType, fileDoesNotExist);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -93,6 +98,11 @@ public class SongDataService implements ISongDataService
         else {
             timesSongHasBeenPlayed.put(song.title, 1);
         }
+    }
+
+    public void saveSongDataToFile() throws IOException {
+        //outputStream.writeObject(timesSongHasBeenPlayed);
+        //outputStream.writeObject(totalTimeSongHasBeenListenedTo);
     }
 
     public Map<String, Integer> getSongTimePlayedValues() {
